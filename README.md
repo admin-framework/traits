@@ -2,9 +2,9 @@
 
 > AdminFramework Traits 提供了一组实用的 PHP Trait，用于快速实现常见的设计模式和功能特性。
 
-<p align="center"> 
-    <a href="https://github.com/admin-framework/traits/blob/main/LICENSE" target="_blank"> 
-        <img src="https://poser.pugx.org/admin-framework/traits/license" alt="License"> 
+<p align="center">  
+    <a href="https://github.com/admin-framework/database" target="_blank"> 
+        <img src="https://img.shields.io/badge/license-MIT-%234d9082" alt="License"> 
     </a> 
     <a href="https://github.com/admin-framework/traits" target="_blank"> 
         <img src="https://img.shields.io/badge/PHP-%3E%3D5.6-blue" alt="PHP Version Require"> 
