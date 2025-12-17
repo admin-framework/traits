@@ -7,10 +7,10 @@
         <img src="https://img.shields.io/badge/license-MIT-%234d9082" alt="License"> 
     </a> 
     <a href="https://github.com/admin-framework/traits" target="_blank"> 
-        <img src="https://img.shields.io/badge/PHP-%3E%3D5.6-blue" alt="PHP Version Require"> 
+        <img src="https://img.shields.io/badge/PHP-%3E%3D5.6-%23787baf" alt="PHP Version Require"> 
     </a> 
     <a href="https://github.com/admin-framework/traits/releases" target="_blank"> 
-        <img src="https://img.shields.io/github/v/release/admin-framework/traits" alt="Latest Stable Version"> 
+        <img src="https://img.shields.io/badge/release-v1.0.0-%2336a1d7" alt="Latest Stable Version"> 
     </a> 
 </p>
 
