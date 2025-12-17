@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace AdminFramework\Traits;
 
-use RuntimeException;
+use Exception;
 
 /**
  * 单例Trait
@@ -64,7 +64,7 @@ trait SingletonTrait
     private function __clone()
     {
         // 抛出异常或直接返回，防止克隆
-        throw new RuntimeException('Singleton instance cannot be cloned');
+        throw new Exception('Singleton instance cannot be cloned');
     }
 
     /**
@@ -74,6 +74,6 @@ trait SingletonTrait
     public function __wakeup()
     {
         // 抛出异常，防止反序列化
-        throw new RuntimeException('Singleton instance cannot be unserialized');
+        throw new Exception('Singleton instance cannot be unserialized');
     }
 }
