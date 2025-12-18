@@ -34,6 +34,12 @@ $attr->concatAttribute('gender', '人');
 // 追加(数组)属性
 $attr->appendAttribute('hobby', '足球');
 $attr->appendAttribute('hobby', '篮球');
+$attr->setHobby('top', '游泳');
+$attr->setHobby([
+    'low' => 'test'
+]);
+$attr->setHobby('a.b.c.e', '游泳');
+$attr->setHobby('a.b.c.d', '游泳');
 
 // 删除属性值
 $attr->unsetAttribute('age');

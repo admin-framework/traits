@@ -73,7 +73,7 @@ trait AttributeTrait
      * @param mixed $value 属性值
      * @return $this
      */
-    public function setAttribute($name, $value = false)
+    public function setAttribute($name, $index = false, $value = false)
     {
         // 如果属性名是数组，则合并数组属性
         if (is_array($name)) {
@@ -83,13 +83,14 @@ trait AttributeTrait
 
         // 判断当前类是否有当前属性
         if (property_exists(static::class, $name)) {
-            $this->$name = $value;
+            $this->$name = $this->getValue($this->$name, $index, $value);
             return $this;
         }
 
         // 如果没有符号，则直接设置数组属性
         if (strpos($name, '.') === false) {
-            $this->_attributes[$name] = $value;
+            $attValue = isset($this->_attributes[$name]) ? $this->_attributes[$name] : '';
+            $this->_attributes[$name] = $this->getValue($attValue, $index, $value);
             return $this;
         }
 
@@ -102,16 +103,12 @@ trait AttributeTrait
             if (!isset($currentArray[$key]) or empty($currentArray[$key])) {
                 $currentArray[$key] = [];
             }
-            // 如果当前数组属性不是数组类型，则抛出异常
-            if (!is_array($currentArray[$key])) {
-                throw new Exception("属性 {$name} 不是数组类型");
-            }
             // 如果当前数组属性是数组类型，则继续递归设置数组属性
             $currentArray = &$currentArray[$key];
         }
 
         // 最后将属性值设置到当前数组属性中
-        $currentArray = $value;
+        $currentArray = $this->getValue($currentArray, $index, $value);
 
         // 返回当前对象
         return $this;
@@ -130,8 +127,7 @@ trait AttributeTrait
 
         // 如果当前属性值为空，则直接设置属性值
         if (empty($data)) {
-            $this->setAttribute($name, [$value]);
-            return $this;
+            return $this->setAttribute($name, [$value]);
         }
 
         // 如果当前属性值是数组类型，则在数组后面追加属性值
@@ -243,10 +239,72 @@ trait AttributeTrait
             $arguments = array_merge([$attr], $arguments);
             // 方法名
             $method = $prefix . 'Attribute';
+
+            if ($prefix == 'set') {
+                if (count($arguments) > 2) {
+                    $name = array_shift($arguments);
+                    $value = array_pop($arguments);
+                    $index = $name . '.' . implode('.', $arguments);
+                    $arguments = [$index, $value];
+                }
+            }
+
             // 调用方法
             return call_user_func_array([$this, $method], $arguments);
         }
 
         throw new Exception("方法 {$name} 不存在");
+    }
+
+    /**
+     * Check if an array is associative (has string keys)
+     * @param array $array
+     * @return bool
+     */
+    private function isAssoc(array $array)
+    {
+        if (empty($array)) {
+            return false;
+        }
+        $keys = array_keys($array);
+        return array_keys($keys) !== $keys;
+    }
+
+    private function getValue($data, $index, $value = false)
+    {
+        if (is_string($data)) {
+            if ($value === false) {
+                return $index;
+            } else {
+                return [
+                    $index => $value
+                ];
+            }
+        }
+
+        if ($value !== false) {
+            // Case 1: We're setting a specific index in an array (e.g., setAttribute('hobby.0', 'value') or setAttribute('hobby', 'key', 'value'))
+            if (is_array($index)) {
+                $data = array_merge($data, $index);
+            } else {
+                $data[$index] = $value;
+            }
+        } else {
+            // Case 2: We're setting the entire value (e.g., setAttribute('hobby', ['value']))
+            if (is_array($data) && is_array($index)) {
+                // If both are arrays, check if we should merge or replace
+                if ($this->isAssoc($data) || $this->isAssoc($index)) {
+                    // If either is associative, merge them
+                    $data = array_merge($data, $index);
+                } else {
+                    // If both are numeric arrays, replace completely
+                    $data = $index;
+                }
+            } else {
+                // Otherwise, replace completely
+                $data = $index;
+            }
+        }
+        return $data;
     }
 }
