@@ -1,6 +1,7 @@
 {
   "name": "admin-framework/traits",
   "description": "AdminFramework Traits 提供了一组实用的 PHP Trait，用于快速实现常见的设计模式和功能特性。",
+  "version": "1.0.3",
   "type": "library",
   "license": "MIT",
   "authors": [
